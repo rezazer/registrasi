@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrasi Workshop Pernikahan Islami</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js"></script>
+</head>
+<body>
+    <div class="container mt-5">
+        <form action="https://docs.google.com/forms/d/e/1FAIpQLSe4e0vZGyqy5c6T8E9TETehzyB944B3yL63rwFfESUOxeCXIQ/formResponse"
+              target="_self"
+              id="bootstrapForm"
+              method="POST">
+            <fieldset>
+                <h2>Registrasi Peserta Workshop Pernikahan Islami</h2>
+            </fieldset>
+
+            <!-- Field Nama -->
+            <fieldset>
+                <legend for="303246898">Nama <span class="text-danger">*</span></legend>
+                <div class="form-group">
+                    <input id="169740503" type="text" name="entry.169740503" class="form-control" required placeholder="Masukkan Nama Anda">
+                </div>
+            </fieldset>
+
+            <!-- Field Infaq -->
+            <fieldset>
+                <legend for="835439887">Infaq <span class="text-danger">*</span></legend>
+                <div class="form-group">
+                    <div class="custom-control custom-radio">
+                        <input type="radio" id="infaqTransfer" name="entry.1398612078" value="Transfer" class="custom-control-input" required>
+                        <label class="custom-control-label" for="infaqTransfer">Transfer</label>
+                    </div>
+                    <div class="custom-control custom-radio">
+                        <input type="radio" id="infaqCash" name="entry.1398612078" value="Cash" class="custom-control-input" required>
+                        <label class="custom-control-label" for="infaqCash">Cash</label>
+                    </div>
+                    <div class="custom-control custom-radio">
+                        <input type="radio" id="infaqNo" name="entry.1398612078" value="Tidak berinfaq" class="custom-control-input" required>
+                        <label class="custom-control-label" for="infaqNo">Tidak berinfaq</label>
+                    </div>
+                </div>
+            </fieldset>
+
+            <!-- Field Nominal Infaq -->
+            <fieldset id="nominalInfaqField" style="display:none;">
+                <legend for="1044530952">Nominal Infaq <span class="text-danger">*</span></legend>
+                <div class="form-group">
+                    <input id="nominalInfaq" type="text" name="entry.1344075138" class="form-control" placeholder="Masukkan Nominal Infaq">
+                    <div class="invalid-feedback">Nominal infaq harus berupa angka.</div>
+                </div>
+            </fieldset>
+
+            <!-- Hidden fields required by Google Forms -->
+            <input type="hidden" name="fvv" value="1">
+            <input type="hidden" name="fbzx" value="-8599099400851617196">
+            <input type="hidden" name="pageHistory" value="0">
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary">Kirim Data Registrasi</button>
+        </form>
+    </div>
+
+    <!-- Modal Bootstrap -->
+    <div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="successModalLabel">Registrasi Sukses</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Selamat, Anda sudah registrasi, silakan masuk.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript/jQuery Logic -->
+    <script>
+        $(document).ready(function () {
+            // Hide/show "Nominal Infaq" field based on selected Infaq option
+            $('input[name="entry.1398612078"]').change(function () {
+                if ($('#infaqCash').is(':checked')) {
+                    $('#nominalInfaqField').show();  // Show if Cash is selected
+                    $('#nominalInfaq').prop('required', true); // Make Nominal Infaq required
+                } else {
+                    $('#nominalInfaqField').hide();  // Hide if Transfer or Tidak berinfaq is selected
+                    $('#nominalInfaq').prop('required', false); // Make Nominal Infaq not required
+                }
+            });
+
+            // Handle form submission with validation
+            $('#bootstrapForm').submit(function (event) {
+                event.preventDefault();
+
+                // Validate Nominal Infaq (only if Cash is selected)
+                if ($('#infaqCash').is(':checked')) {
+                    var nominalInfaqValue = $('#nominalInfaq').val();
+                    if (!$.isNumeric(nominalInfaqValue) || nominalInfaqValue <= 0) {
+                        $('#nominalInfaq').addClass('is-invalid');
+                        return false;  // Prevent form submission
+                    } else {
+                        $('#nominalInfaq').removeClass('is-invalid');
+                    }
+                }
+
+                // Submit the form if everything is valid
+                $(this).ajaxSubmit({
+                    dataType: 'jsonp',
+                    error: function () {
+                        // Show success modal on form submit
+                        $('#successModal').modal('show');
+                    }
+                });
+            });
+        });
+    </script>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
